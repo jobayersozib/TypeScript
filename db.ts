@@ -1,7 +1,10 @@
-
+const express = require('express')
+const app = express()
 type  DB_CONN_TYPE={host:string,user:string,password:string,database:string}
 
 type ADD_USER={name:string,email:string,address:string}
+
+let result:any;
 
 const DB_CONN_OBJ:DB_CONN_TYPE={
     host:"localhost",
@@ -11,7 +14,7 @@ const DB_CONN_OBJ:DB_CONN_TYPE={
 }
 
  interface CRUD{
-    select():void
+    select():any
     create(info:ADD_USER):string
     update(id:number , info:ADD_USER):string
     delete(id:number):string
@@ -34,21 +37,35 @@ export class DB implements CRUD{
         
     }
 
-    select():void{
+    select():any{
         this.connection.query('SELECT * FROM users WHERE 1', function (error, results, fields) {
             if (error){
                 console.log("Error ....")
                
             }else{
-                 for(var i:number=0; i<results.length;i++){
-                     console.log('Name: ',results[i].username);
-                     console.log('E-mail: ',results[i].email);
-                     console.log('Address: ',results[i].address);
-                 }
+                 var data={}
+                 app.get('/',function(req,res){
+                    res.setHeader('Content-Type', 'application/json');
+                    for(var i:number=0; i<results.length;i++){
+                    //  console.log('Name: ',results[i].username);
+                    //  console.log('E-mail: ',results[i].email);
+                    //  console.log('Address: ',results[i].address);
+                    data[results[i].id]={name:results[i].username,email:results[i].email,address:results[i].address}
+                    
+                   }
+                    res.send(data);
+                    
+                });
+                
+                app.listen(process.env.PORT,() => console.log('Example app listening on port 3000!'))
             }
-            
+            result=results;
           });
           this.connection.end();
+          return result;
+          
+          
+          
     }
 
     update(id:number,info:ADD_USER):string{

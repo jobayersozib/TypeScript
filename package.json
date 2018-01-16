@@ -11,8 +11,22 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^8.5.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "mysql": "^2.15.0",
+    "nodemailer": "^4.4.1",
     "typescript": "^2.6.2",
     "yargs": "^10.0.3"
   }
 }
+
+
+
+/*function encodeImageFileAsURL(element) {
+  var file = element.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function() {
+    console.log('RESULT', reader.result)
+  }
+  reader.readAsDataURL(file);
+} */
